@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+count=0
+tmp=1
+while [[ $(($tmp % 2)) -ne 0 ]]
+do
+read tmp
+let count=$count+1
+done
+echo $count

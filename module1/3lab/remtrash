@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+cd $HOME
+tmp=$1
+if [[ ! -f $tmp ]]; then echo "Это не файл!"; exit; fi
+th=find . -name ".trash" -maxdepth 1 -type d 2>/dev/null
+if [[ $th = '' ]]
+then
+mkdir -p .trash
+fi
+cd .trash
+string=`ln --backup=numbered $1 -v ./ | awk '{print $1'} | tr -d "'"`
+echo $string"-"$tmp >> $HOME/.trash.log
+rm $tmp

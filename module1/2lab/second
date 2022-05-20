@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+touch full.log
+grep -rwhs '(II)' --exclude "*.journal*" /var/log > full.log
+grep -rwhs '(WW)' --exclude "*.journal*" /var/log >> full.log
+sed -i '/warning/d' full.log
+sed -i '/informational/d' full.log
+sed -i 's/(II)/Information: /' full.log
+sed -i 's/(WW)/Warning: /' full.log
+cat full.log

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+touch emails.lst
+grep -Eiorsh --exclude "*.journal*" --exclude "*.gz" '([[:alnum:]_.-]+@[[:alnum:]_.-]+?\.[[:alpha:].]{2,6})' "$@" * /var/log | sort | uniq > emails.lst
+tr '\n' ',' < emails.lst
+echo 

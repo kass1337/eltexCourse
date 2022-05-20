@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+function dirNeeded() {
+    mkdir "Backup-$dateN"
+    cd "Backup-$dateN"
+}
+function copyFiles() {
+    cp -r $HOME/listtask/* $HOME/Backup-$dateN
+    files=$(ls $HOME/Backup-$dateN)
+    files=$(echo $files | tr -d "\n")
+    echo "Создана директория Backup-$dateN, скопированы файлы $files" >> $HOME/backup-report
+}
+cd $HOME
+dateN=$(date +%Y-%m-%d)
+filesN=$(ls | grep -E 'Backup-' | sort -n | tail -1 | cut -d '-' -f 2-4)
+oldBackup=$(ls | grep -E 'Backup-' | sort -n | tail -1)
+    if [[ -z $filesN ]]
+    then
+    dirNeeded
+    copyFiles
+    else
+    secLast=$(date -d $filesN +%s)
+    secNow=$(date -d $dateN +%s)
+    let lastBackup=($secNow-$secLast)/60/60/24
+        if [[ $lastBackup -gt 7 ]]
+        then
+        dirNeeded
+        copyFiles
+        else
+        listInSource=$(ls $HOME/listtask)
+            for file in $listInSource
+            do
+            oldFile=$(find $HOME"/"$oldBackup -name $file)
+                if [[ $oldFile != '' ]]
+                then
+                oldBackupFileSize=$(ls -l $HOME"/"$oldBackup"/"$file | awk '{print$5}')
+                oldSourceFileSize=$(ls -l $HOME"/"listtask"/"$file | awk '{print$5}')
+                if [[ $oldBackupFileSize -ne $oldSourceFileSize ]]
+                    then
+                    repN=$repN' '$file
+                    mv $HOME/$oldBackup/$file $HOME/$oldBackup/$file.$dateN
+                    cp -r $HOME/listtask/$file $HOME/$oldBackup
+                    repN=$repN' '$file.$dateN
+                    fi
+                else 
+                cp -r $HOME/listtask/$file $HOME/$oldBackup
+                rep=$rep' '$file
+                fi
+            done
+            echo "Внесены изменения в $oldBackup $dateN " >> $HOME/backup-report
+            echo "Добавлены новые файлы: $rep " >> $HOME/backup-report
+            echo "Переименованы файлы: $repN " >> $HOME/backup-report
+        fi
+    fi

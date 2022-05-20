@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+echo "1. nano"
+echo "2. vi"
+echo "3. ifconfig"
+echo "4. exit"
+while [[ true ]]
+do
+read tmp
+case $tmp in 1) 
+nano
+break
+;;
+2)
+vi
+break
+;;
+3)
+ifconfig
+break
+;;
+4)
+exit
+break
+;;
+esac
+done

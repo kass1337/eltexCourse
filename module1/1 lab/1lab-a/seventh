@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+while [[ true ]]
+do
+read f s t
+if [[ $f == 'q' ]]
+then
+exit
+fi
+if (echo "$f" | grep -E -q "^?[0-9]+$");
+then 
+if (echo "$t" | grep -E -q "^?[0-9]+$");
+then 
+case $s in +)
+let res=$f+$t
+echo $res
+continue
+;;
+\*)
+let res=$f\*$t
+echo $res
+continue
+;;
+/)
+let res=$f/$t
+echo $res
+continue
+;;
+\*\*)
+let res=$f\*\*$t
+echo $res
+continue
+;;
+%)
+let res=$f%$t
+echo $res
+continue
+;;
+*) echo "Текстовые данные - "$f " "$s " "$t
+continue
+;;
+esac
+else 
+echo "Текстовые данные - "$f " "$s " "$t
+fi
+else 
+echo "Текстовые данные - "$f " "$s " "$t
+fi
+done

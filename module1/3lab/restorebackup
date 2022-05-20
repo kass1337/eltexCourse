@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+cd $HOME
+Backup=$(ls | grep -E 'Backup-' | sort -n | tail -1)
+cd $Backup
+wfiles=$(ls | grep -P -v '[a-zA-Z0-9]*.[0-9]{1,4}-[0-9]{1,2}-[0-9]{1,2}')
+gFiles=$(ls)
+#echo $wfiles
+for file in $wfiles
+do
+for nfile in $gFiles
+do 
+if [[ $nfile == $file ]] 
+then
+cp $HOME/$Backup/$nfile $HOME/listtask
+fi
+done
+done

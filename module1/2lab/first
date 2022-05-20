@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+touch errors.log
+grep -rwhs 'syslogd' --exclude "*.journal*" /var/log > errors.log
+while read line
+do
+for word in $line
+do
+if [ -f $word ]
+then
+echo $word
+fi
+done
+done < errors.log

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+echo $0 $1 $2 > outb.txt
+if [[ $1 > $2 ]]
+then echo $1 >> outb.txt
+else echo $2 >> outb.txt
+fi

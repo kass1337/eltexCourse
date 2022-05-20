@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+concat=''
+tmp=''
+while [[ $tmp != 'q' ]]
+do
+read tmp
+concat=$concat' '$tmp
+done
+echo $concat

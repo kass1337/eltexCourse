@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+cat $HOME/.trash.log | grep -n $1 | cut -d "-" -f 1 | tr -d "./"
+echo "Чтобы подтвердить восстановление файла введите номер строки. Выход - 0: "
+while [[ true ]] 
+do
+read str
+case $str in 
+0)
+break
+;;
+*) string=`sed -n $str'p' $HOME/.trash.log`
+lines=`wc -l $HOME/.trash.log | cut -d " " -f 1`
+if [[ $str -le $lines ]]
+then
+filedir=`echo $string | cut -d "-" -f 2` 
+file=`echo $string | cut -d "-" -f 1 | tr -d "./"`
+filedir=`echo $string | cut -d "-" -f 2`
+filedir=${filedir%"/"$file*}
+if [[ ! -d $filedir ]]
+then
+filedir=$HOME
+fi
+if [[ ! -f $HOME/.trash/$file ]]
+then
+echo "Ошибка! Файл невозможно восстановить. Завершение работы"
+exit
+else
+echo "Восстанавление в "$filedir
+fi
+ln $HOME/.trash/$file $filedir
+rm $HOME/.trash/$file
+else
+echo "Неверная строка"
+fi
+esac
+done
+
